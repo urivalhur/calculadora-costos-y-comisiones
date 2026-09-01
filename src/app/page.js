@@ -8,14 +8,21 @@ export default function Home() {
           <div className="mb-4 mt-8 flex flex-col gap-2 sm:mb-6 sm:mt-11 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-600">
-                Calculadora
+                Calculadora de deuda
               </p>
               <h2
-                className="mt-1 scroll-mt-6 text-3xl font-extrabold leading-tight text-slate-950"
+                className=" scroll-mt-6 text-3xl font-extrabold leading-tight text-slate-950 pr-5"
                 id="start-cards-title"
               >
-                ¿Cuanto cuesta un mal hábito?
+                ¿Cuanto cuesta un mal hábito de pago?
               </h2>
+              
+              <p className="mt-4">
+                El costo de una deuda no depende solo de la tarjeta que eliges, 
+                sino también de las decisiones que tomas al pagarla. 
+                Simula distintos escenarios y descubre cómo las tasas, comisiones y <strong> tus hábitos de pago </strong> 
+                afectan el costo final de tu deuda.
+              </p>
             </div>
           </div>
 
