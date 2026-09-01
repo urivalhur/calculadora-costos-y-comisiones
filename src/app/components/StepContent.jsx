@@ -17,7 +17,9 @@ export default function StepContent({
 }) {
   return (
     <section className="mt-4 box-border flex min-h-[10rem] max-w-full flex-col sm:mt-6 sm:min-h-[11.75rem]" id={id}>
-      <div className={`${layouts[variant]} ${className}`}>{children}</div>
+      <div className={`min-w-0 max-w-full ${layouts[variant]} ${className}`}>
+        {children}
+      </div>
 
       {actions && (
         <div className="mt-auto flex justify-end gap-3 pt-3">{actions}</div>

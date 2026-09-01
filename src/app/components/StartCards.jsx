@@ -175,7 +175,7 @@ export default function StartCards() {
 
   return (
     <div className="mt-4 max-w-full sm:mt-7" aria-labelledby="start-cards-title">
-      <div className="box-border min-h-[30rem] max-w-full px-0 sm:min-h-[34rem] sm:max-w-4xl sm:px-5">
+      <div className="mx-auto box-border min-h-[30rem] w-full max-w-[calc(100svw-2rem)] px-0 sm:min-h-[34rem] sm:max-w-4xl sm:px-5">
         {!hasStarted && (
           <div className="flex min-h-[10rem] flex-col items-stretch justify-center gap-3 sm:min-h-[11.75rem]">
             <div className="relative h-14 w-full">
