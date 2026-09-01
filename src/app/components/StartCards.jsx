@@ -213,7 +213,7 @@ export default function StartCards() {
         )}
 
         {hasStarted && (
-          <div className="grid gap-4">
+          <div className="grid min-w-0 gap-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">
               Ajusta tu simulaci&oacute;n
             </p>
