@@ -91,6 +91,45 @@ function SummaryRow({ label, value, strong = false }) {
   );
 }
 
+function CostDetails({ amountValue, selectedCard, showButton = true, totalCost }) {
+  return (
+    <>
+      <div className="mt-4 border-t border-slate-200 pt-4 sm:mt-5">
+        <div className="grid gap-2">
+          <SummaryRow label="CAT:" value={selectedCard?.cat || "--"} />
+          <SummaryRow label="TIIE:" value={genericCosts.tiie} />
+          <SummaryRow
+            label="Pago tard&iacute;o:"
+            value={genericCosts.latePayment}
+          />
+          <SummaryRow label="Retiro:" value={genericCosts.withdrawal} />
+        </div>
+      </div>
+
+      <div className="mt-4 border-t border-slate-200 pt-4 sm:mt-5">
+        <SummaryRow
+          label="Costo total:"
+          strong
+          value={amountValue ? formatCurrency(totalCost) : "--"}
+        />
+      </div>
+
+      <div className="mt-4 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500 sm:mt-5">
+        - anualidad {selectedCard?.fee || "--"} y seguros, si aplican
+      </div>
+
+      {showButton && (
+        <button
+          className="mt-4 w-full rounded-full border border-[#181D27] bg-[#181D27] px-6 py-3 text-sm font-bold text-white shadow-sm transition duration-150 hover:-translate-y-0.5 hover:bg-white hover:text-[#181D27] hover:shadow-md focus:outline-none focus:ring-4 focus:ring-slate-200 sm:mt-5"
+          type="button"
+        >
+          &iexcl;me interesa!
+        </button>
+      )}
+    </>
+  );
+}
+
 function ResultDropdown({
   className = "",
   id,
@@ -171,7 +210,6 @@ function JourneySummary({
   selectedMonths,
   selectedScenarioCard,
   showGraph,
-  totalCost,
 }) {
   const selectedMonthsLabel = selectedMonths
     ? `${selectedMonths} ${selectedMonths === 1 ? "mes" : "meses"}`
@@ -274,45 +312,18 @@ function JourneySummary({
         </button>
       )}
 
-      {compactCost && (
-        <>
-          <div className="mt-4 border-t border-slate-200 pt-4 sm:mt-5">
-            <div className="grid gap-2">
-              <SummaryRow label="CAT:" value={selectedCard?.cat || "--"} />
-              <SummaryRow label="TIIE:" value={genericCosts.tiie} />
-              <SummaryRow
-                label="Pago tard&iacute;o:"
-                value={genericCosts.latePayment}
-              />
-              <SummaryRow label="Retiro:" value={genericCosts.withdrawal} />
-            </div>
-          </div>
-
-          <div className="mt-4 border-t border-slate-200 pt-4 sm:mt-5">
-            <SummaryRow
-              label="Costo total:"
-              strong
-              value={amountValue ? formatCurrency(totalCost) : "--"}
-            />
-          </div>
-
-          <div className="mt-4 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500 sm:mt-5">
-            - anualidad {selectedCard?.fee || "--"} y seguros, si aplican
-          </div>
-
-          <button
-            className="mt-4 w-full rounded-full border border-[#181D27] bg-[#181D27] px-6 py-3 text-sm font-bold text-white shadow-sm transition duration-150 hover:-translate-y-0.5 hover:bg-white hover:text-[#181D27] hover:shadow-md focus:outline-none focus:ring-4 focus:ring-slate-200 sm:mt-5"
-            type="button"
-          >
-            &iexcl;me interesa!
-          </button>
-        </>
-      )}
     </div>
   );
 }
 
-function ChartPanel({ costPoints, debtPoints }) {
+function ChartPanel({
+  amountValue,
+  costPoints,
+  debtPoints,
+  selectedCard,
+  showCostDetails = false,
+  totalCost,
+}) {
   return (
     <div className="box-border min-w-0 max-w-full overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-7 sm:py-6">
       <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-slate-500 sm:tracking-[0.35em]">
@@ -448,6 +459,14 @@ function ChartPanel({ costPoints, debtPoints }) {
           Costos y comisiones
         </span>
       </div>
+
+      {showCostDetails && (
+        <CostDetails
+          amountValue={amountValue}
+          selectedCard={selectedCard}
+          totalCost={totalCost}
+        />
+      )}
     </div>
   );
 }
@@ -573,26 +592,12 @@ function CostSidebar({ amountValue, selectedCard, totalCost }) {
     <aside className="rounded-3xl border border-slate-200 bg-white px-5 py-6 shadow-sm">
       <h3 className="text-xl font-extrabold text-slate-950">Resumen</h3>
 
-      <div className="mt-5 border-t border-slate-200 pt-4">
-        <div className="grid gap-2">
-          <SummaryRow label="CAT:" value={selectedCard?.cat || "--"} />
-          <SummaryRow label="TIIE:" value={genericCosts.tiie} />
-          <SummaryRow label="Pago tard&iacute;o:" value={genericCosts.latePayment} />
-          <SummaryRow label="Retiro:" value={genericCosts.withdrawal} />
-        </div>
-      </div>
-
-      <div className="mt-5 border-t border-slate-200 pt-4">
-        <SummaryRow
-          label="Costo total:"
-          strong
-          value={amountValue ? formatCurrency(totalCost) : "--"}
-        />
-      </div>
-
-      <div className="mt-5 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">
-        - anualidad {selectedCard?.fee || "--"} y seguros, si aplican
-      </div>
+      <CostDetails
+        amountValue={amountValue}
+        selectedCard={selectedCard}
+        showButton={false}
+        totalCost={totalCost}
+      />
     </aside>
   );
 }
@@ -689,7 +694,14 @@ export default function ResultsChart({
     return (
       <StepContent className="-mt-3 sm:mt-0" id="step-resultados" variant="results">
         <div className="grid w-full min-w-0 gap-4">
-          <ChartPanel costPoints={costPoints} debtPoints={debtPoints} />
+          <ChartPanel
+            amountValue={amountValue}
+            costPoints={costPoints}
+            debtPoints={debtPoints}
+            selectedCard={selectedCard}
+            showCostDetails
+            totalCost={totalCost}
+          />
           <JourneySummary
             amountValue={amountValue}
             compactCost
@@ -700,7 +712,6 @@ export default function ResultsChart({
             selectedMonths={selectedMonths}
             selectedScenarioCard={selectedScenarioCard}
             showGraph
-            totalCost={totalCost}
           />
         </div>
       </StepContent>
