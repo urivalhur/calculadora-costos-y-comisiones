@@ -228,7 +228,7 @@ body {
 }
 
 .tutorial-button-compress {
-  animation: tutorial-button-compress 1200ms linear forwards;
+  animation: tutorial-button-compress 150ms linear forwards;
   min-width: 0;
   pointer-events: none;
   transition: none;
@@ -237,13 +237,13 @@ body {
 }
 
 .tutorial-button-label-out {
-  animation: tutorial-button-label-out 520ms cubic-bezier(0.16, 1, 0.3, 1)
+  animation: tutorial-button-label-out 65ms cubic-bezier(0.16, 1, 0.3, 1)
     forwards;
   will-change: opacity, transform;
 }
 
 .tutorial-skip-float-out {
-  animation: tutorial-skip-float-out 680ms cubic-bezier(0.2, 0, 0.1, 1)
+  animation: tutorial-skip-float-out 85ms cubic-bezier(0.2, 0, 0.1, 1)
     forwards;
   pointer-events: none;
   transition: none;
