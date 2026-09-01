@@ -33,6 +33,54 @@ const genericCosts = {
   withdrawal: "6.5%",
 };
 
+const scenarioGrowthRates = {
+  liquidar: 0,
+  masMinimo: 0.08,
+  minimo: 0.28,
+  olvide: 0.55,
+  retiro: 0.75,
+};
+
+function getGrowthTone(growthRate) {
+  if (growthRate <= 0) {
+    return {
+      label: "Sin crecimiento",
+      ring: "border-emerald-500/45 bg-emerald-400/20 shadow-[0_18px_54px_rgba(16,185,129,0.18)]",
+      text: "text-emerald-600",
+    };
+  }
+
+  if (growthRate <= 0.1) {
+    return {
+      label: "Crecimiento bajo",
+      ring: "border-yellow-400/55 bg-yellow-300/25 shadow-[0_18px_54px_rgba(234,179,8,0.18)]",
+      text: "text-yellow-600",
+    };
+  }
+
+  if (growthRate <= 0.3) {
+    return {
+      label: "Crecimiento medio",
+      ring: "border-orange-500/45 bg-orange-400/20 shadow-[0_18px_54px_rgba(249,115,22,0.18)]",
+      text: "text-orange-600",
+    };
+  }
+
+  if (growthRate <= 0.6) {
+    return {
+      label: "Crecimiento alto",
+      ring: "border-red-500/45 bg-red-400/20 shadow-[0_18px_54px_rgba(239,68,68,0.18)]",
+      text: "text-red-600",
+    };
+  }
+
+  return {
+    label: "Crecimiento crítico",
+    ring: "border-amber-900/45 bg-amber-900/20 shadow-[0_18px_54px_rgba(120,53,15,0.22)]",
+    text: "text-amber-900",
+  };
+}
+
 const scenarioSummaries = {
   liquidar:
     "\u00a1Felicidades! Tienes el mejor h\u00e1bito de todos. Pagar el total cada mes, ya sea pago para no generar intereses o pago de cosas que compraste de contado, no genera costo alguno. Eres responsable, \u00a1te ganaste tu tarjeta!",
@@ -127,6 +175,39 @@ function CostDetails({ amountValue, selectedCard, showButton = true, totalCost }
         </button>
       )}
     </>
+  );
+}
+
+function DebtComparisonVisual({ amountValue, finalDebt, growthRate }) {
+  const tone = getGrowthTone(growthRate);
+  const growthPercent = Math.round(growthRate * 100);
+  const outerSize = `clamp(9.5rem, ${58 + growthRate * 28}vw, 18rem)`;
+
+  return (
+    <div className="mt-5 flex flex-col items-center">
+      <div
+        aria-label={`Comparación entre deuda inicial de ${formatCurrency(amountValue)} y deuda final de ${formatCurrency(finalDebt)}`}
+        className={`relative grid aspect-square place-items-center rounded-full border ${tone.ring}`}
+        role="img"
+        style={{ width: outerSize }}
+      >
+        <div className="absolute inset-4 rounded-full border border-white/50 bg-white/25" />
+        <div className="absolute inset-8 rounded-full border border-white/40 bg-white/20" />
+        <div className="relative grid aspect-square w-[48%] place-items-center rounded-full border border-blue-400/55 bg-blue-400/25 shadow-[0_14px_42px_rgba(74,158,248,0.24)]">
+          <div className="absolute inset-3 rounded-full border border-white/50 bg-white/20" />
+          <span className="relative text-xs font-extrabold uppercase tracking-[0.12em] text-blue-700">
+            inicial
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-1 text-center">
+        <p className={`text-sm font-extrabold ${tone.text}`}>
+          {growthPercent > 0 ? `+${growthPercent}%` : "sin aumento"}
+        </p>
+        <p className="text-xs font-bold text-slate-500">{tone.label}</p>
+      </div>
+    </div>
   );
 }
 
@@ -320,143 +401,38 @@ function ChartPanel({
   amountValue,
   costPoints,
   debtPoints,
+  finalDebt,
+  growthRate,
   selectedCard,
   showCostDetails = false,
   totalCost,
 }) {
   return (
-    <div className="box-border min-w-0 max-w-full overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-7 sm:py-6">
+    <div
+      className="box-border min-w-0 max-w-full overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-7 sm:py-6"
+      data-final-debt={finalDebt}
+      data-growth-rate={growthRate}
+    >
       <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-slate-500 sm:tracking-[0.35em]">
         Evoluci&oacute;n de la deuda
       </p>
 
-      <div className="mt-4 sm:mt-6">
-        <svg
-          aria-label="Gr&aacute;fico de evoluci&oacute;n de la deuda"
-          className="h-auto w-full"
-          role="img"
-          viewBox={`0 0 ${chart.width} ${chart.height}`}
-        >
-          <defs>
-            <linearGradient id="balanceArea" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="#93C5FD" stopOpacity="0.42" />
-              <stop offset="100%" stopColor="#93C5FD" stopOpacity="0.12" />
-            </linearGradient>
-          </defs>
+      <DebtComparisonVisual
+        amountValue={amountValue}
+        finalDebt={finalDebt}
+        growthRate={growthRate}
+      />
 
-          {yTicks.map((tick) => {
-            const y = getPoint(tick, 0).y;
-
-            return (
-              <g key={tick}>
-                <line
-                  stroke="#E5E7EB"
-                  strokeWidth="1"
-                  x1={chart.padding.left}
-                  x2={chart.width - chart.padding.right}
-                  y1={y}
-                  y2={y}
-                />
-                <text
-                  fill="#52525B"
-                  fontSize="12"
-                  textAnchor="end"
-                  x={chart.padding.left - 12}
-                  y={y + 4}
-                >
-                  {formatCurrency(tick)}
-                </text>
-              </g>
-            );
-          })}
-
-          <path d={toAreaPath(debtPoints)} fill="url(#balanceArea)" />
-          <path
-            d={toPath(debtPoints)}
-            fill="none"
-            stroke="#4A9EF8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="3"
-          />
-          <path
-            d={toPath(costPoints)}
-            fill="none"
-            stroke="#5B4BFF"
-            strokeDasharray="8 7"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2.5"
-          />
-
-          {debtPoints.map((point, index) => (
-            <circle
-              cx={point.x}
-              cy={point.y}
-              fill="#4A9EF8"
-              key={`debt-${index}`}
-              r="3.5"
-            />
-          ))}
-
-          {costPoints.map((point, index) => (
-            <circle
-              cx={point.x}
-              cy={point.y}
-              fill="#5B4BFF"
-              key={`interest-${index}`}
-              r="3"
-            />
-          ))}
-
-          {months.map((month, index) => {
-            const x = getPoint(0, index).x;
-
-            return (
-              <text
-                fill="#52525B"
-                fontSize="12"
-                key={month}
-                textAnchor="middle"
-                x={x}
-                y={chart.height - 12}
-              >
-                {month}
-              </text>
-            );
-          })}
-        </svg>
-      </div>
-
-      <div className="mt-3 flex flex-wrap justify-center gap-6 text-xs font-medium text-slate-600">
+      <div className="mt-5 flex flex-wrap justify-center gap-6 text-xs font-medium text-slate-600">
         <span className="flex items-center gap-2">
-          <svg aria-hidden="true" className="h-3 w-8" viewBox="0 0 32 12">
-            <line
-              stroke="#4A9EF8"
-              strokeLinecap="round"
-              strokeWidth="3"
-              x1="2"
-              x2="30"
-              y1="6"
-              y2="6"
-            />
-          </svg>
-          Deuda
+          <span className="h-3 w-3 rounded-full border border-blue-400/55 bg-blue-400/25" />
+          Deuda inicial
         </span>
         <span className="flex items-center gap-2">
-          <svg aria-hidden="true" className="h-3 w-8" viewBox="0 0 32 12">
-            <line
-              stroke="#5B4BFF"
-              strokeDasharray="5 4"
-              strokeLinecap="round"
-              strokeWidth="3"
-              x1="2"
-              x2="30"
-              y1="6"
-              y2="6"
-            />
-          </svg>
-          Costos y comisiones
+          <span
+            className={`h-3 w-3 rounded-full border ${getGrowthTone(growthRate).ring}`}
+          />
+          Deuda final
         </span>
       </div>
 
@@ -629,6 +605,8 @@ export default function ResultsChart({
     (scenario) => scenario.id === selectedScenario,
   );
   const amountValue = Number(amount || 0);
+  const growthRate = scenarioGrowthRates[selectedScenario] ?? 0;
+  const finalDebt = Math.round(amountValue * (1 + growthRate));
   const estimatedInterest = amountValue ? Math.round(amountValue * 0.0927) : 0;
   const totalCost = amountValue + estimatedInterest + 420;
 
@@ -698,6 +676,8 @@ export default function ResultsChart({
             amountValue={amountValue}
             costPoints={costPoints}
             debtPoints={debtPoints}
+            finalDebt={finalDebt}
+            growthRate={growthRate}
             selectedCard={selectedCard}
             showCostDetails
             totalCost={totalCost}
@@ -748,7 +728,12 @@ export default function ResultsChart({
       {showGraph && (
         <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_215px]">
           <div>
-            <ChartPanel costPoints={costPoints} debtPoints={debtPoints} />
+            <ChartPanel
+              costPoints={costPoints}
+              debtPoints={debtPoints}
+              finalDebt={finalDebt}
+              growthRate={growthRate}
+            />
             {!hideResultControls && (
               <ResultControls
                 amount={amount}
