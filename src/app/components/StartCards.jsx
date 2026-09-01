@@ -27,11 +27,11 @@ function CompactSelect({
   const selectedOption = options.find((option) => option.value === value);
 
   return (
-    <div className="relative">
+    <div className="relative min-w-0">
       <button
         aria-expanded={isOpen}
         aria-label={label}
-        className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:bg-[#F3F4F6] focus:outline-none focus:ring-4 focus:ring-slate-200"
+        className="box-border flex w-full min-w-0 items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:bg-[#F3F4F6] focus:outline-none focus:ring-4 focus:ring-slate-200"
         onClick={() => onToggle(id)}
         type="button"
       >
@@ -174,8 +174,8 @@ export default function StartCards() {
   };
 
   return (
-    <div className="mt-4 max-w-full sm:mt-7" aria-labelledby="start-cards-title">
-      <div className="mx-auto box-border min-h-[30rem] w-full max-w-[calc(100svw-2rem)] px-0 sm:min-h-[34rem] sm:max-w-4xl sm:px-5">
+    <div className="mt-4 w-full min-w-0 sm:mt-7" aria-labelledby="start-cards-title">
+      <div className="box-border min-h-[30rem] w-full min-w-0 sm:min-h-[34rem]">
         {!hasStarted && (
           <div className="flex min-h-[10rem] flex-col items-stretch justify-center gap-3 sm:min-h-[11.75rem]">
             <div className="relative h-14 w-full">
@@ -213,11 +213,11 @@ export default function StartCards() {
         )}
 
         {hasStarted && (
-          <div className="grid min-w-0 max-w-full gap-4">
+          <div className="grid min-w-0 gap-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">
               Ajusta tu simulaci&oacute;n
             </p>
-            <div className="grid min-w-0 max-w-full gap-3">
+            <div className="grid min-w-0 gap-3">
               <CompactSelect
                 id="scenario"
                 isOpen={openControl === "scenario"}
@@ -259,7 +259,7 @@ export default function StartCards() {
               />
             </div>
 
-            <div className="box-border max-w-full rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="box-border w-full min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
               <label
                 className="block text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-400"
                 htmlFor="mobile-debt-amount"
@@ -284,11 +284,11 @@ export default function StartCards() {
               </div>
             </div>
 
-            <div className="box-border max-w-full rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="box-border w-full min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-400">
                 Tiempo a simular
               </p>
-              <div className="mt-2 grid grid-cols-3 gap-2">
+              <div className="mt-2 grid min-w-0 grid-cols-3 gap-2">
                 {monthOptions.map((option) => (
                   <button
                     className={`flex min-h-11 flex-col items-center justify-center rounded-[10px] border px-3 py-2 text-sm font-extrabold leading-tight transition focus:outline-none focus:ring-4 focus:ring-slate-200 ${

@@ -183,7 +183,7 @@ function JourneySummary({
 
   return (
     <div
-      className={`relative rounded-3xl border border-slate-200 bg-white shadow-sm ${
+      className={`relative box-border w-full min-w-0 rounded-3xl border border-slate-200 bg-white shadow-sm ${
         compactCost ? "px-5 py-5 sm:py-6" : "min-h-[330px] px-7 py-7"
       }`}
       id="results-journey"
@@ -688,7 +688,7 @@ export default function ResultsChart({
   if (mobileFull) {
     return (
       <StepContent className="-mt-3 sm:mt-0" id="step-resultados" variant="results">
-        <div className="grid min-w-0 max-w-full gap-4">
+        <div className="grid w-full min-w-0 gap-4">
           <ChartPanel costPoints={costPoints} debtPoints={debtPoints} />
           <JourneySummary
             amountValue={amountValue}
