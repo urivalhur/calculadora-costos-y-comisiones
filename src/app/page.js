@@ -3,7 +3,7 @@ import StartCards from "./components/StartCards";
 export default function Home() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-slate-50">
-      <section className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-10 sm:py-12 lg:px-12 lg:py-16 xl:px-16 ">
+      <section className="box-border mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-10 sm:py-12 lg:px-12 lg:py-16 xl:px-16 ">
         
         <div className="max-w-[640px]">
           <h1 className="mb-4 text-[40px] font-extrabold leading-[1.08] tracking-normal text-slate-950 sm:mb-5 sm:text-5xl">

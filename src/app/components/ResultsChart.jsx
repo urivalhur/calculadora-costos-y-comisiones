@@ -314,7 +314,7 @@ function JourneySummary({
 
 function ChartPanel({ costPoints, debtPoints }) {
   return (
-    <div className="min-w-0 overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-7 sm:py-6">
+    <div className="box-border min-w-0 max-w-full overflow-hidden rounded-3xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-7 sm:py-6">
       <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-slate-500 sm:tracking-[0.35em]">
         Evoluci&oacute;n de la deuda
       </p>
@@ -688,7 +688,7 @@ export default function ResultsChart({
   if (mobileFull) {
     return (
       <StepContent className="-mt-3 sm:mt-0" id="step-resultados" variant="results">
-        <div className="grid min-w-0 gap-4">
+        <div className="grid min-w-0 max-w-full gap-4">
           <ChartPanel costPoints={costPoints} debtPoints={debtPoints} />
           <JourneySummary
             amountValue={amountValue}

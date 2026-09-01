@@ -16,7 +16,7 @@ export default function StepContent({
   variant,
 }) {
   return (
-    <section className="mt-4 flex min-h-[10rem] flex-col sm:mt-6 sm:min-h-[11.75rem]" id={id}>
+    <section className="mt-4 box-border flex min-h-[10rem] max-w-full flex-col sm:mt-6 sm:min-h-[11.75rem]" id={id}>
       <div className={`${layouts[variant]} ${className}`}>{children}</div>
 
       {actions && (

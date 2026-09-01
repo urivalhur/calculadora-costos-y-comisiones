@@ -174,8 +174,8 @@ export default function StartCards() {
   };
 
   return (
-    <div className="mt-4 sm:mt-7" aria-labelledby="start-cards-title">
-      <div className="min-h-[30rem] max-w-4xl px-0 sm:min-h-[34rem] sm:px-5">
+    <div className="mt-4 max-w-full sm:mt-7" aria-labelledby="start-cards-title">
+      <div className="box-border min-h-[30rem] max-w-full px-0 sm:min-h-[34rem] sm:max-w-4xl sm:px-5">
         {!hasStarted && (
           <div className="flex min-h-[10rem] flex-col items-stretch justify-center gap-3 sm:min-h-[11.75rem]">
             <div className="relative h-14 w-full">
@@ -213,11 +213,11 @@ export default function StartCards() {
         )}
 
         {hasStarted && (
-          <div className="grid min-w-0 gap-4">
+          <div className="grid min-w-0 max-w-full gap-4">
             <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-slate-500">
               Ajusta tu simulaci&oacute;n
             </p>
-            <div className="grid gap-3">
+            <div className="grid min-w-0 max-w-full gap-3">
               <CompactSelect
                 id="scenario"
                 isOpen={openControl === "scenario"}
@@ -259,7 +259,7 @@ export default function StartCards() {
               />
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="box-border max-w-full rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
               <label
                 className="block text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-400"
                 htmlFor="mobile-debt-amount"
@@ -284,7 +284,7 @@ export default function StartCards() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="box-border max-w-full rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-slate-400">
                 Tiempo a simular
               </p>
